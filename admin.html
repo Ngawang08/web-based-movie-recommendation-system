@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+
+    <style>
+        body { font-family: Arial; background:#f4f6f8; margin:0; }
+        .container { width:70%; margin:auto; padding:20px; }
+        .card { background:white; padding:15px; margin-bottom:10px; border-radius:10px; }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Admin Panel</h2>
+
+<div class="card">
+
+<h3>Users</h3>
+
+{% for user in users %}
+<p>
+    {{ user[1] }} (Age: {{ user[3] }})
+    <a href="/delete_user/{{ user[0] }}">Delete</a>
+</p>
+{% endfor %}
+
+</div>
+
+<div class="card">
+
+<h3>Movies</h3>
+
+{% for movie in movies %}
+<p>
+    {{ movie[1] }}
+    <a href="/delete_movie/{{ movie[0] }}">Delete</a>
+</p>
+{% endfor %}
+
+</div>
+
+</div>
+
+</body>
+</html>

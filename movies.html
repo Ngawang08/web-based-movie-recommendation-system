@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movies</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f6f8;
+        }
+
+        .navbar {
+            background: #111827;
+            padding: 14px 20px;
+        }
+
+        .navbar a {
+            color: white;
+            margin-right: 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 85%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .blue { background:#2563eb; color:white; }
+        .green { background:#16a34a; color:white; }
+        .red { background:#dc2626; color:white; }
+
+        input {
+            padding: 6px;
+            margin: 5px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <a href="/movies">Home</a>
+    <a href="/watchlist">Watchlist</a>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/recommend">Recommendations</a>
+
+    {% if session["username"] == "admin" %}
+        <a href="/admin">Admin</a>
+    {% endif %}
+</div>
+
+<div class="container">
+
+<h2>🎬 Movies</h2>
+
+<!-- SEARCH -->
+<form method="GET" action="/movies">
+    <input type="text" name="search" placeholder="Search movies..." value="{{ search }}">
+    <button class="btn blue">Search</button>
+</form>
+
+<!-- MOVIE LIST -->
+{% for movie in movies %}
+<div class="card">
+
+    <h3>{{ movie[1] }}</h3>
+    <p><b>Genre:</b> {{ movie[2] }}</p>
+    <p><b>IMDb Rating:</b> {{ movie[3] }}</p>
+
+    <!-- USER RATING DISPLAY -->
+    {% if movie[5] %}
+        <p>⭐ Your Rating: {{ movie[5] }}/10</p>
+
+        <!-- DELETE RATING -->
+        <form action="/delete_rating" method="POST">
+            <input type="hidden" name="movie_id" value="{{ movie[0] }}">
+            <button class="btn red">Delete Rating</button>
+        </form>
+    {% else %}
+        <p><i>You haven't rated this yet</i></p>
+    {% endif %}
+
+    <!-- RATE MOVIE -->
+    <form action="/rate" method="POST">
+        <input type="hidden" name="movie_id" value="{{ movie[0] }}">
+        <input type="number" name="rating" min="1" max="10" placeholder="Rate (1-10)" required>
+        <button class="btn green">Rate</button>
+    </form>
+
+    <br>
+
+    <!-- WATCHLIST BUTTON (FIXED) -->
+    {% if watchlist_view %}
+        <form action="/remove_watchlist" method="POST">
+            <input type="hidden" name="movie_id" value="{{ movie[0] }}">
+            <button class="btn red">Remove from Watchlist</button>
+        </form>
+    {% else %}
+        <form action="/add_watchlist" method="POST">
+            <input type="hidden" name="movie_id" value="{{ movie[0] }}">
+            <button class="btn blue">Add to Watchlist</button>
+        </form>
+    {% endif %}
+
+</div>
+{% endfor %}
+
+<!-- PAGINATION -->
+<div>
+    <a href="/movies?page={{ page-1 if page > 1 else 1 }}&search={{ search }}">⬅ Prev</a>
+    |
+    <a href="/movies?page={{ page+1 }}&search={{ search }}">Next ➡</a>
+</div>
+
+</div>
+
+</body>
+</html>

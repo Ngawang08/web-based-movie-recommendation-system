@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+
+    <style>
+        body { font-family: Arial; background:#f4f6f8; margin:0; }
+        .container { width:70%; margin:auto; padding:20px; }
+        .card { background:white; padding:15px; margin-bottom:10px; border-radius:10px; }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>📊 Dashboard</h2>
+
+<div class="card">
+    <p>Total Rated: {{ total }}</p>
+    <p>Average Rating: {{ avg }}</p>
+    <p>Favorite Genre: {{ genre }}</p>
+</div>
+
+<h3>Your Ratings</h3>
+
+{% for movie in rated_movies %}
+<div class="card">
+    {{ movie[0] }} — ⭐ {{ movie[1] }}
+</div>
+{% endfor %}
+
+</div>
+
+</body>
+</html>
